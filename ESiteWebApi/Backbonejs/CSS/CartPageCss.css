@@ -1,0 +1,51 @@
+﻿
+*{
+    box-sizing:border-box;
+}
+
+body{
+    text-align:center;
+    padding:10px;
+    margin:0px;
+}
+
+header, footer{
+    padding:20px;
+    background-color:darkturquoise;
+    border-radius:10px;
+}
+
+section{
+    width:70%;
+    float:left;
+    height:400px;
+    background-color:azure;
+}
+
+tbody{
+    overflow-y:auto;
+}
+
+.right{
+    width:30%;
+    float:right;
+    height:200px;
+    background-color: lightgreen;
+    border-left:4px solid white;
+}
+.right2 {
+    width: 30%;
+    float: right;
+    height: 200px;
+    background-color:palegoldenrod;
+    border-top: 4px solid white;
+}
+.main{
+    margin: 10px 0px;
+}
+.main::after{
+    content:"";
+    clear:both;
+    display:table;
+}
+

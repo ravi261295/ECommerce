@@ -1,0 +1,303 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>E-Commerce Site</title>
+    <link href="../../Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="../CSS/CartPageCss.css" rel="stylesheet" />
+    <style>
+        body {
+            background-image: url("../../Images/backgroundImage.jpg");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+</head>
+ <!--style="padding-top:100px"-->
+<body>
+
+    <div id="divView"></div>
+
+    <!--Login Template-->
+    <script type="text/template" id="loginTemplate">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="well">
+                <div class="alert alert-danger hidden" role="alert">
+                </div>
+                <div class="row">
+                    <div class="col-md-9">
+                        <h4><b>Existing User Login</b></h4>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="button" id="loginToRegister" class="btn btn-primary" value="Go To Register" />
+                    </div>
+                </div>
+                <div class="row col-md-offset-0">
+                    <form class="col-md-12">
+                        <div class="form-group email">
+                            <label>Email</label>
+                            <input class="form-control" type="email" id="loginEmail" placeholder="Email" autofocus />
+                            <span class="form-inline"></span>
+                        </div>
+                        <div class="form-group password">
+                            <label>Password</label>
+                            <input class="form-control" type="password" id="loginPassword" placeholder="Password" />
+                            <span class="form-inline"></span>
+                        </div>
+                        <button type="submit" id="loginSubmit" class="btn btn-primary">Login</button>
+                        <input type="button" id="btnReset" class="btn btn-danger" value="Reset" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <!--Register Template-->
+    <script type="text/template" id="registerTemplate">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="well">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h4><b>Register User</b></h4>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <input type="button" id="registerToLogin" class="btn btn-primary" value="Got To Login" />
+                        <!--<a href="http://localhost:55206/Backbonejs/Login.html#">Goto Login</a>-->
+                    </div>
+                </div>
+                <div class="row col-sm-offset-0">
+                    <div class="alert alert-warning alert-dismissible hidden modelAlert registrationAlert" role="alert">
+                        <h5 id="registrationWrong"></h5>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form class="col-md-12">
+                        <div class="form-group fullname">
+                            <label>Full Name</label>
+                            <input class="form-control" type="text" id="registerFullName" placeholder="Full Name" autofocus />
+                            <span class="form-inline"></span>
+                        </div>
+                        <div class="form-group email">
+                            <label>Email</label>
+                            <input class="form-control" type="email" id="registerEmail" placeholder="Email" />
+                            <span class="form-inline"></span>
+                        </div>
+                        <div class="form-group password">
+                            <label>Password</label>
+                            <input class="form-control" type="password" id="registerPassword" placeholder="Password" />
+                            <span class="form-inline"></span>
+                        </div>
+                        <button type="submit" id="registerSubmit" class="btn btn-primary">Register</button>
+                        <input type="button" id="btnResetRegister" class="btn btn-danger" value="Reset" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <!--Dashboard Template-->
+    <script type="text/template" id="dashboardTemplate">
+        <header>
+            <div class="row">
+                <div class="col-sm-10">
+                    <h4>
+                        Shopping Cart
+                    </h4>
+                </div>
+                <div class="dropdown col-sm-2">
+                    <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Welcome <%= email %>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" id="logout" href="index.html">Logout</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <input type="text" id="searchModelNumber" placeholder="Search Model Number" />
+                </div>
+                <div class="col-sm-1">
+                    <button type="button" id="searchButton" data-toggle="modal" data-target="#cartModal" class="btn btn-warning btn-sm">Search</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="alert alert-warning alert-dismissible hidden modelAlert" role="alert">
+                        <h5 id="modelNumberWrong"></h5>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main">
+            <section style="overflow-y:scroll">
+                <div>
+                    <table id="myTable" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Model Number</th>
+                                <th>Quantity</th>
+                                <th>Price($)</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+            <div>
+                <aside class="right">
+                    <h3 class="text-center">
+                        Billing Information
+                    </h3>
+                    <br />
+                    <div class="row container">
+                        <div class="col-sm-6">
+                            <h6>Subtotal ($) : </h6>
+                            <br />
+                            <h6>Est. Delivery Time : </h6>
+                        </div>
+                        <div class="col-sm-4">
+                            <h6><%= sumTotal %></h6>
+                            <br />
+                            <h6><%= estDeliveryTime %></h6>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+            <div>
+                <aside class="right right2" id="bottomRight">
+                    <h3 class="text-center">
+                        Delivery Address
+                    </h3>
+                    <br />
+                    <div class="row container">
+                        <h4 class="col-md-offset-1">
+                            <%= address %>
+                        </h4>
+                    </div>
+                </aside>
+            </div>
+        </div>
+
+        <footer>
+            <div class="row">
+                <div class="col-sm-10">
+
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" id="placeOrderButton" data-toggle="modal" data-target="#placeOrder" class="btn btn-success">Place Order</button>
+                </div>
+            </div>
+        </footer>
+    </script>
+
+    <div class="modal" id="cartModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modelTitle">Add Model in Cart</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="alert alert-warning alert-dismissible hidden requiredQuantity " role="alert">
+                                <h5 id="requiredQuantityWrong"></h5>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <form>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" for="ModelNumber">Model Number</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" readonly type="text" id="modelNumber" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" for="Description">Description</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" readonly type="text" id="description" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" for="Price">Price</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" readonly type="number" id="price" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" for="AvailableQuantity">Available Quantity</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" readonly type="number" id="availableQuantity" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" for="RequiredQuantity">Required Quantity</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" type="number" id="requiredQuantity" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" for="DeliveryTime">Delivery Time</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" readonly type="number" id="deliveryTime" />
+                            </div>
+                        </div>
+
+                        <button type="submit" id="addModelButton" class="btn btn-primary">Add Model</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="placeOrder" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title placeOrderTitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body placeOrderBody">
+                    <h4 id="modalBody"></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../Scripts/jquery-3.3.1.js"></script>
+    <script src="../../Scripts/underscore.js"></script>
+    <script src="../../Scripts/backbone.js"></script>
+    <script src="../Js/index.js"></script>
+</body>
+</html>
